@@ -76,7 +76,7 @@ public class AccountManager {
 		try {
 			Connection conn = DBUtil.getInstance().getConnection();
 
-			String query = "SELECT * FROM bank.account a WHERE routingNum = ?;";
+			String query = "SELECT * FROM bank.accounts a WHERE account_num = ?;";
 
 			PreparedStatement pstmt = conn.prepareStatement(query);
 

@@ -76,7 +76,7 @@ public class TransactionManager {
 		try {
 			Connection conn = DBUtil.getInstance().getConnection();
 
-			String query = "SELECT * FROM bank.transactions t WHERE transaction_id = ?;";
+			String query = "SELECT * FROM bank.transactions t WHERE routing_num = ?;";
 
 			PreparedStatement pstmt = conn.prepareStatement(query);
 
@@ -85,7 +85,7 @@ public class TransactionManager {
 			ResultSet rs = pstmt.executeQuery();
 
 			while (rs.next()) {
-				Transaction t = new Transaction(rs.getInt(1), rs.getFloat(2), rs.getInt(3));
+				Transaction t = new Transaction(rs.getInt(1), rs.getFloat(2), rs.getString(3), rs.getInt(4));
 				transactions.add(t);
 			}
 			logger.info("Pull transactions table.");

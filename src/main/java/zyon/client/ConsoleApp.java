@@ -78,9 +78,9 @@ public class ConsoleApp {
 					+ "WHERE username = ? AND userpassword = ?) AS exist;";
 			
 			do {
-				System.out.print(usernamePrompt);
+				System.out.println(usernamePrompt);
 				username = input.nextLine();
-				System.out.print(passwordPrompt);
+				System.out.println(passwordPrompt);
 				password = input.nextLine();
 				
 				PreparedStatement pstmt = conn.prepareStatement(query);
@@ -111,18 +111,31 @@ public class ConsoleApp {
 				System.out.println("Enter Action: ");
 				String choice = input.nextLine();
 				
+				TransactionManager tr = new TransactionManager();
+				tr.pullManager(acc.get_accounts().get(0).get_routingNum());
+				
 				switch (choice) {
 					case "1":
 						System.out.println("Balance: " + acc.get_accounts().get(0).get_balance());
 						break;
 					case "2":
-						TransactionManager tr = new TransactionManager();
-						tr.pullManager(acc.get_accounts().get(0).get_routingNum());
+
 						for (Transaction t : tr.get_Transaction()) {
 							System.out.println(t);
 						}
 						break;
 					case "3":
+						System.out.println("Enter deposit: ");
+						float d = Float.parseFloat(input.next());
+						query = "SELECT Deposit(?, ?);";
+						PreparedStatement pstmt2 = conn.prepareStatement(query);
+						pstmt2.setFloat(1, d);
+						pstmt2.setInt(2, acc.get_accounts().get(0).get_routingNum());
+						int rowAffected = pstmt2.executeUpdate();
+						break;
+					case "4":
+						break;
+					case "5":
 						quit = true;
 						break;
 					default:
@@ -142,9 +155,11 @@ public class ConsoleApp {
 	public void loginMenu() {
 		StringBuilder prompt = new StringBuilder();
 		prompt.append("\nSelections\n");
-		prompt.append("1. Check Balance");
+		prompt.append("1. Check Balance\n");
 		prompt.append("2. Check Transaction History\n");
-		prompt.append("3. Exit\n");
+		prompt.append("3. Deposit\n");
+		prompt.append("4. Withdraw\n");
+		prompt.append("5. Exit\n");
 		
 		System.out.println(prompt);
 	}

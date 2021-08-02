@@ -2,6 +2,7 @@ package zyon.common;
 
 public class Transaction {
 	private int _id;
+	private String _date;
 	private float _amount;
 	private int _routingNumber;
 	
@@ -17,6 +18,14 @@ public class Transaction {
 		super();
 		this._id = _id;
 		this._amount = _amount;
+		this._routingNumber = _routingNumber;
+	}
+	
+	public Transaction(int _id, float _amount, String _date, int _routingNumber) {
+		super();
+		this._id = _id;
+		this._amount = _amount;
+		this._date = _date;
 		this._routingNumber = _routingNumber;
 	}
 
@@ -45,10 +54,21 @@ public class Transaction {
 	public void setRoutingNumber(int routingNumber) {
 		this._routingNumber = routingNumber;
 	}
+	
+	
+	public String get_date() {
+		return _date;
+	}
+
+
+	public void set_date(String _date) {
+		this._date = _date;
+	}
+
 
 	@Override
 	public String toString() {
-		return String.format("[Amount: " + _amount + "\tRouting #: " + _routingNumber + "]");
+		return String.format("[Date" + _date+ "\tAmount: " + _amount + "\tRouting #: " + _routingNumber + "]");
 	}
 
 }
