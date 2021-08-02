@@ -127,13 +127,35 @@ public class ConsoleApp {
 					case "3":
 						System.out.println("Enter deposit: ");
 						float d = Float.parseFloat(input.next());
-						query = "SELECT Deposit(?, ?);";
+						query = "INSERT INTO bank.transactions(amount, routing_num)"
+								+ " VALUES(?, ?);"
+								+ " UPDATE bank.accounts"
+								+ " SET balance = balance + ?"
+								+ " WHERE routing_num = ?;";
 						PreparedStatement pstmt2 = conn.prepareStatement(query);
 						pstmt2.setFloat(1, d);
 						pstmt2.setInt(2, acc.get_accounts().get(0).get_routingNum());
+						
+						pstmt2.setFloat(3, d);
+						pstmt2.setInt(4, acc.get_accounts().get(0).get_routingNum());
 						int rowAffected = pstmt2.executeUpdate();
 						break;
 					case "4":
+						System.out.println("Enter withdraw: ");
+						float w = Float.parseFloat(input.next());
+						query = "INSERT INTO bank.transactions(amount, routing_num)"
+								+ " VALUES(? * -1, ?);"
+								+ " UPDATE bank.accounts"
+								+ " SET balance = balance - ?"
+								+ " WHERE routing_num = ?;";
+						PreparedStatement pstmt3 = conn.prepareStatement(query);
+						pstmt3.setFloat(1, w);
+						pstmt3.setInt(2, acc.get_accounts().get(0).get_routingNum());
+						
+						pstmt3.setFloat(3, w);
+						pstmt3.setInt(4, acc.get_accounts().get(0).get_routingNum());
+						int rowAffected = pstmt3.executeUpdate();
+
 						break;
 					case "5":
 						quit = true;
