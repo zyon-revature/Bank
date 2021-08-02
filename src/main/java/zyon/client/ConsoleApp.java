@@ -138,7 +138,9 @@ public class ConsoleApp {
 						
 						pstmt2.setFloat(3, d);
 						pstmt2.setInt(4, acc.get_accounts().get(0).get_routingNum());
-						int rowAffected = pstmt2.executeUpdate();
+						
+						int rowAffected2 = pstmt2.executeUpdate();
+						acc.get_accounts().get(0).deposit(d);
 						break;
 					case "4":
 						System.out.println("Enter withdraw: ");
@@ -154,10 +156,43 @@ public class ConsoleApp {
 						
 						pstmt3.setFloat(3, w);
 						pstmt3.setInt(4, acc.get_accounts().get(0).get_routingNum());
-						int rowAffected = pstmt3.executeUpdate();
+						int rowAffected3 = pstmt3.executeUpdate();
+						acc.get_accounts().get(0).withdraw(w);
 
 						break;
 					case "5":
+						System.out.println("Enter transfer: ");
+						float t = Float.parseFloat(input.next());
+						query = "INSERT INTO bank.transactions(amount, routing_num)"
+								+ " VALUES(? * -1, ?);"
+								+ " UPDATE bank.accounts"
+								+ " SET balance = balance - ?"
+								+ " WHERE routing_num = ?;";
+						PreparedStatement pstmt4 = conn.prepareStatement(query);
+						pstmt4.setFloat(1, t);
+						pstmt4.setInt(2, acc.get_accounts().get(0).get_routingNum());
+						
+						pstmt4.setFloat(3, t);
+						pstmt4.setInt(4, acc.get_accounts().get(0).get_routingNum());
+						int rowAffected4 = pstmt4.executeUpdate();
+						acc.get_accounts().get(0).withdraw(t);
+						
+						query = "INSERT INTO bank.transactions(amount, routing_num)"
+								+ " VALUES(?, ?);"
+								+ " UPDATE bank.accounts"
+								+ " SET balance = balance + ?"
+								+ " WHERE routing_num = ?;";
+						PreparedStatement pstmt5 = conn.prepareStatement(query);
+						pstmt5.setFloat(1, t);
+						System.out.println("Enter rounting number of the account you wish to transfer to: ");
+						int transferTo = Integer.parseInt(input.next());
+						pstmt5.setInt(2, transferTo);
+						
+						pstmt5.setFloat(3, t);
+						pstmt5.setInt(4, transferTo);
+						int rowAffected5 = pstmt5.executeUpdate();
+						break;
+					case "6":
 						quit = true;
 						break;
 					default:
@@ -181,7 +216,8 @@ public class ConsoleApp {
 		prompt.append("2. Check Transaction History\n");
 		prompt.append("3. Deposit\n");
 		prompt.append("4. Withdraw\n");
-		prompt.append("5. Exit\n");
+		prompt.append("5. Transfer\n");
+		prompt.append("6. Exit\n");
 		
 		System.out.println(prompt);
 	}

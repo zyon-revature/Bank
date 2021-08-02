@@ -43,7 +43,15 @@ public class Account {
 	public void set_balance(float _balance) {
 		this._balance = _balance;
 	}
-
+	
+	public void deposit(float num) {
+		this._balance = num + this._balance;
+	}
+	
+	public void withdraw (float num) {
+		this._balance = this._balance - num;
+	}
+	
 	public int get_accountNum() {
 		return _accountNum;
 	}
